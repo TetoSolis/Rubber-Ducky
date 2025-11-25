@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# ========= A PERSONNALISER =========
+# URL du portail captif (page de login)
+PORTAL_URL="http://IP_DU_PFSENSE:8002"       # ou https://... selon ton cas
+
+# Identifiants
+USERNAME="mon_login"
+PASSWORD="mon_mot_de_passe"
+
+# Nom des champs du formulaire (à adapter en fonction du portail)
+USER_FIELD="auth_user"       # ex: auth_user, username, login, etc.
+PASS_FIELD="auth_pass"       # ex: auth_pass, password, etc.
+EXTRA_FIELD_NAME="redirurl"  # souvent redirurl ou zone, etc.
+EXTRA_FIELD_VALUE="http://www.google.com"
+
+# Fichier temporaire pour les cookies
+COOKIE_JAR="/tmp/pfsense_cookies.txt"
+# ===================================
+
+# Étape 1 : récupérer la page pour obtenir les cookies de session
+curl -k -s -c "$COOKIE_JAR" "$PORTAL_URL" > /dev/null
+
+# Étape 2 : envoyer la requête de login
+curl -k -s -b "$COOKIE_JAR" -c "$COOKIE_JAR" \
+  -d "${USER_FIELD}=${USERNAME}" \
+  -d "${PASS_FIELD}=${PASSWORD}" \
+  -d "${EXTRA_FIELD_NAME}=${EXTRA_FIELD_VALUE}" \
+  "$PORTAL_URL" > /dev/null
+
+echo "Tentative de connexion au portail pfSense envoyée."
