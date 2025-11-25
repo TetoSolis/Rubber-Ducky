@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ============================
-# CONFIGURATION À PERSONNALISER
+# CONFIGURATION À PERSONNALISERR
 # ============================
 
 PORTAL_URL="http://192.168.33.2:8002/index.php?zone=portail_rt"
